@@ -1,0 +1,5 @@
+{
+  "projectName": "GitHub Pages Playground",
+  "description": "A mock project for experimenting with partly auto-generated GitHub Pages output for release-driven updates.",
+  "tagline": "Toy code can land in src/, and releases can refresh the generated pages."
+}
