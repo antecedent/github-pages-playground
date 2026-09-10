@@ -3,7 +3,7 @@ name: Generate GitHub Pages
 on:
   release:
     types:
-      - created
+      - published
 
 permissions:
   contents: write
@@ -35,13 +35,14 @@ jobs:
 
       - name: Commit generated pages
         run: |
-          if git diff --quiet -- docs/pages; then
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A docs/pages
+
+          if git diff --cached --quiet -- docs/pages; then
             echo "No generated page changes to commit."
             exit 0
           fi
 
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/pages
           git commit -m "docs: update generated pages for ${RELEASE_TAG}"
           git push origin HEAD:${DEFAULT_BRANCH}
