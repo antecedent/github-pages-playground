@@ -13,9 +13,26 @@ $sourceFile = dirname(__DIR__) . '/source/site.json';
 $pagesDirectory = dirname(__DIR__) . '/pages';
 $outputFile = $pagesDirectory . '/index.html';
 
-$site = json_decode((string) file_get_contents($sourceFile), true);
-if (!is_array($site)) {
+if (!is_file($sourceFile) || !is_readable($sourceFile)) {
     fwrite(STDERR, "Unable to read site data from {$sourceFile}\n");
+    exit(1);
+}
+
+$sourceJson = file_get_contents($sourceFile);
+if ($sourceJson === false) {
+    fwrite(STDERR, "Unable to read site data from {$sourceFile}\n");
+    exit(1);
+}
+
+try {
+    $site = json_decode($sourceJson, true, 512, JSON_THROW_ON_ERROR);
+} catch (JsonException $exception) {
+    fwrite(STDERR, "Invalid JSON in {$sourceFile}: {$exception->getMessage()}\n");
+    exit(1);
+}
+
+if (!is_array($site)) {
+    fwrite(STDERR, "Site data in {$sourceFile} must decode to an object.\n");
     exit(1);
 }
 
@@ -67,7 +84,8 @@ $html = <<<HTML
       <p><strong>Target:</strong> {$escapedReleaseTarget}</p>
       <p><strong>Published:</strong> {$escapedReleasePublishedAt}</p>
       <p><strong>Release URL:</strong> {$releaseUrl}</p>
-      <pre>{$escapedReleaseBody}</pre>
+      <h3 id="release-notes-heading">Release notes</h3>
+      <pre aria-labelledby="release-notes-heading">{$escapedReleaseBody}</pre>
     </div>
   </main>
 </body>
