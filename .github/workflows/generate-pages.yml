@@ -38,8 +38,8 @@ jobs:
         with:
           add-paths: docs/pages
           branch: automation/update-generated-pages
-          commit-message: docs: update generated pages for ${{ env.RELEASE_TAG }}
-          title: docs: update generated pages for ${{ env.RELEASE_TAG }}
+          commit-message: "docs: update generated pages for ${{ env.RELEASE_TAG }}"
+          title: "docs: update generated pages for ${{ env.RELEASE_TAG }}"
           body: |
             Update the generated content in `docs/pages` for release `${{ env.RELEASE_TAG }}`.
 
