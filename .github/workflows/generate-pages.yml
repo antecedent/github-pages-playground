@@ -1,6 +1,8 @@
 name: Generate GitHub Pages
 
 on:
+  workflow_dispatch:
+    ~
   release:
     types:
       - published
