@@ -1,0 +1,48 @@
+name: Generate GitHub Pages
+
+on:
+  release:
+    types:
+      - published
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  generate-pages:
+    runs-on: ubuntu-latest
+    env:
+      RELEASE_TAG: ${{ github.event.release.tag_name }}
+      RELEASE_NAME: ${{ github.event.release.name }}
+      RELEASE_BODY: ${{ github.event.release.body }}
+      RELEASE_URL: ${{ github.event.release.html_url }}
+      RELEASE_PUBLISHED_AT: ${{ github.event.release.published_at }}
+      RELEASE_TARGET_COMMITISH: ${{ github.event.release.target_commitish }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7.0.1
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@2.37.2
+        with:
+          php-version: '8.2'
+
+      - name: Generate docs/pages
+        run: php docs/tools/generate-pages.php
+
+      - name: Create pull request for generated pages
+        uses: peter-evans/create-pull-request@v8.1.1
+        with:
+          add-paths: docs/pages
+          branch: automation/update-generated-pages
+          commit-message: docs: update generated pages for ${{ env.RELEASE_TAG }}
+          title: docs: update generated pages for ${{ env.RELEASE_TAG }}
+          body: |
+            Update the generated content in `docs/pages` for release `${{ env.RELEASE_TAG }}`.
+
+            - release title: `${{ env.RELEASE_NAME || env.RELEASE_TAG }}`
+            - target branch: `${{ env.RELEASE_TARGET_COMMITISH }}`
+          delete-branch: true
