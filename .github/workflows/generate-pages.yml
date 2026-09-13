@@ -32,18 +32,18 @@ jobs:
         with:
           php-version: '8.2'
 
-      - name: Generate docs/pages
+      - name: Generate docs/
         run: php docs/tools/generate-pages.php
 
       - name: Create pull request for generated pages
         uses: peter-evans/create-pull-request@v8.1.1
         with:
-          add-paths: docs/pages
+          add-paths: docs
           branch: automation/update-generated-pages
           commit-message: "docs: update generated pages for ${{ env.RELEASE_TAG }}"
           title: "docs: update generated pages for ${{ env.RELEASE_TAG }}"
           body: |
-            Update the generated content in `docs/pages` for release `${{ env.RELEASE_TAG }}`.
+            Update the generated content in `docs` for release `${{ env.RELEASE_TAG }}`.
 
             - release title: `${{ env.RELEASE_NAME || env.RELEASE_TAG }}`
             - target branch: `${{ env.RELEASE_TARGET_COMMITISH }}`

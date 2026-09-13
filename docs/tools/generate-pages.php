@@ -10,7 +10,7 @@ function escapeHtml(string $value): string
 }
 
 $sourceFile = dirname(__DIR__) . '/source/site.json';
-$pagesDirectory = dirname(__DIR__) . '/pages';
+$pagesDirectory = dirname(__DIR__);
 $outputFile = $pagesDirectory . '/index.html';
 
 if (!is_file($sourceFile) || !is_readable($sourceFile)) {
