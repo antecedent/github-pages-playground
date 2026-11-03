@@ -1,1 +1,2 @@
 The text here is plain.
+As of version 0.2, that still holds!
