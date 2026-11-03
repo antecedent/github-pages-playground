@@ -38,6 +38,7 @@ jobs:
       - name: Create pull request for generated pages
         uses: peter-evans/create-pull-request@v8.1.1
         with:
+          token: ${{ secrets.PAGES_PR_TOKEN || github.token }}
           add-paths: docs
           branch: automation/update-generated-pages
           commit-message: "docs: update generated pages for ${{ env.RELEASE_TAG }}"
